@@ -24,3 +24,12 @@ class DataSourceError(ProgramError):
 
     def __str__(self):
         return self.prompt
+
+
+class CacheError(ProgramError):
+
+    def __init__(self, message: str = "Cache error."):
+        self.prompt = f"{self.__class__.__name__}: {message}"
+
+    def __str__(self):
+        return self.prompt

@@ -12,3 +12,9 @@ datasource:
     password: password
     database: dbname
     chatset: utf8mb4
+cache:
+  redis:
+    host: example.com
+    port: 6379
+    password: password
+    database: 0
