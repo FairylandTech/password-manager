@@ -11,7 +11,6 @@ import os
 from typing import Any, Dict, List
 
 import yaml
-import urllib.parse
 from dotenv import load_dotenv
 from fairylandfuture.utils.journal import journal
 from fairylandfuture.constants.enums import EncodingEnum

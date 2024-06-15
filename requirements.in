@@ -19,3 +19,5 @@ django
 pymysql
 pyyaml
 django-redis
+django-simpleui
+djangorestframework

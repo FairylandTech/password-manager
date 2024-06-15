@@ -48,14 +48,20 @@ ALLOWED_HOSTS = PROJECT_CONFIG.allowed_hosts
 # Application definition
 
 INSTALLED_APPS = [
+    # Admin UI
+    "simpleui",
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     # apps
-    "apps.accounts",
+    "apps.example",
+    "apps.rbac",
+    "apps.account"
 ]
 
 MIDDLEWARE = [
