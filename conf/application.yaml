@@ -1,0 +1,14 @@
+# @software: PyCharm
+# @author: Lionel Johnson
+# @contact: https://fairy.host
+# @organization: https://github.com/FairylandFuture
+# @since: 2024-06-15 01:14:26 UTC+8
+---
+datasource:
+  mysql:
+    host: example.com
+    port: 3306
+    username: root
+    password: password
+    database: dbname
+    chatset: utf8mb4

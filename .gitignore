@@ -1,5 +1,8 @@
 # IDEA
 .idea
 
+# Project
+log[s]
+
 # Customs
 conf/dev-application.yaml
