@@ -13,17 +13,24 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-import pymysql
 from fairylandfuture.utils.journal import journal
 
-from utils.config import DataSourceConfig, ProjectConfig
-from utils.exceptions import DataSourceError
+from utils.config import DataSourceConfig, ProjectConfig, CacheConfig
+from utils.exceptions import DataSourceError, CacheError
+from bin.datasource import DataSourceBin
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+CONFIG_DIR = os.path.join(BASE_DIR, "conf")
 
-CONFIG = ProjectConfig(os.path.join(BASE_DIR, ".env"))
-DATA_SOURCE_CONFIG = DataSourceConfig(CONFIG.datasource_engine, CONFIG.env, os.path.join(BASE_DIR, "conf")).config
+PROJECT_CONFIG = ProjectConfig(os.path.join(BASE_DIR, ".env"))
+RUN_ENV = PROJECT_CONFIG.environment
+DATA_SOURCE_ENGINE = PROJECT_CONFIG.datasource_engine
+CACHE_ENGINE = PROJECT_CONFIG.cache_engine
+LOG_LEVEL = PROJECT_CONFIG.log_level
+
+DATA_SOURCE_CONFIG = DataSourceConfig(DATA_SOURCE_ENGINE, RUN_ENV, CONFIG_DIR).config
+CACHE_CONFIG = CacheConfig(CACHE_ENGINE, RUN_ENV, CONFIG_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -33,25 +40,37 @@ SECRET_KEY = "django-insecure-6wkly!xq*o@gnmo_mmw@3fb7u3ejqqb*a9@+w9yd@$$vg&q%h=
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = CONFIG.debug
+DEBUG = PROJECT_CONFIG.debug
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = CONFIG.allowed_hosts
+ALLOWED_HOSTS = PROJECT_CONFIG.allowed_hosts
 
 # Application definition
 
 INSTALLED_APPS = [
+    # Admin UI
+    "simpleui",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # framework
+    "rest_framework",
+    # "django_filters",
+    # "corsheaders",
+    # cache
+    "django_redis",
     # apps
-    "apps.accounts",
+    "apps.example",
+    "apps.rbac",
+    "apps.account",
 ]
 
 MIDDLEWARE = [
+    # cache
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -59,6 +78,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # cache
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "managers.urls"
@@ -91,7 +112,7 @@ WSGI_APPLICATION = "managers.wsgi.application"
 #     }
 # }
 
-if CONFIG.datasource_engine == "mysql":
+if DATA_SOURCE_ENGINE == "mysql":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -103,24 +124,45 @@ if CONFIG.datasource_engine == "mysql":
             "CHARSET": DATA_SOURCE_CONFIG.get("charset"),
         }
     }
-    db_settings = DATABASES["default"]
-    db_name = db_settings["NAME"]
-    conn = pymysql.connect(
-        host=db_settings["HOST"],
-        user=db_settings["USER"],
-        password=db_settings["PASSWORD"],
-        port=int(db_settings["PORT"]),
-        charset="utf8mb4",
-        cursorclass=pymysql.cursors.DictCursor,
-    )
-
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name} DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;")
-    finally:
-        conn.close()
+    DataSourceBin.process()
+if DATA_SOURCE_ENGINE == "postgresql":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "HOST": DATA_SOURCE_CONFIG.get("host"),
+            "PORT": DATA_SOURCE_CONFIG.get("port"),
+            "USER": DATA_SOURCE_CONFIG.get("username"),
+            "PASSWORD": DATA_SOURCE_CONFIG.get("password"),
+            "NAME": DATA_SOURCE_CONFIG.get("database"),
+            "OPTIONS": {
+                "options": f"-c search_path={DATA_SOURCE_CONFIG.get('schema') if DATA_SOURCE_CONFIG.get('schema') else 'public'}",
+            },
+        }
+    }
 else:
     raise DataSourceError("Unsupported datasource engine")
+
+if CACHE_ENGINE == "redis":
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": CACHE_CONFIG.redis_url,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                "PASSWORD": CACHE_CONFIG.config.get("password"),
+                "CONNECTION_POOL_KWARGS": {"max_connections": 100},
+            },
+        }
+    }
+else:
+    raise CacheError("Unsupported cache engine")
+
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_SECONDS = 60 * 60
+CACHE_MIDDLEWARE_KEY_PREFIX = "password_mamager"
+
+SESSION_CACHE_ALIAS = "default"
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -144,10 +186,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 # LANGUAGE_CODE = "en-us"
-LANGUAGE_CODE = CONFIG.language_code
+LANGUAGE_CODE = PROJECT_CONFIG.language_code
 
 # TIME_ZONE = "UTC"
-TIME_ZONE = CONFIG.time_zone
+TIME_ZONE = PROJECT_CONFIG.time_zone
 
 USE_I18N = True
 
@@ -168,14 +210,14 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {
         "journal": {
-            "level": CONFIG.log_level,
+            "level": LOG_LEVEL,
             "class": "utils.journal.JournalHandler",
         },
     },
     "loggers": {
         "django": {
             "handlers": ["journal"],
-            "level": CONFIG.log_level,
+            "level": LOG_LEVEL,
             "propagate": True,
         },
     },

@@ -9,7 +9,9 @@
 
 import logging
 
-from fairylandfuture.utils.journal import journal
+from fairylandfuture.utils.journal import Journal
+
+journal: Journal = Journal(serialize=True)
 
 
 class JournalHandler(logging.Handler):
