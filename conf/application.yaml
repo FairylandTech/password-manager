@@ -10,8 +10,15 @@ datasource:
     port: 3306
     username: root
     password: password
-    database: dbname
+    database: example
     chatset: utf8mb4
+  postgresql:
+    host: example.com
+    port: 5432
+    username: root
+    password: password
+    database: example
+    schema: public
 cache:
   redis:
     host: example.com

@@ -50,25 +50,27 @@ ALLOWED_HOSTS = PROJECT_CONFIG.allowed_hosts
 INSTALLED_APPS = [
     # Admin UI
     "simpleui",
-
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    # framework
+    "rest_framework",
+    # "django_filters",
+    # "corsheaders",
+    # cache
+    "django_redis",
     # apps
     "apps.example",
     "apps.rbac",
-    "apps.account"
+    "apps.account",
 ]
 
 MIDDLEWARE = [
-
     # cache
     "django.middleware.cache.UpdateCacheMiddleware",
-
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -76,7 +78,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     # cache
     "django.middleware.cache.FetchFromCacheMiddleware",
 ]
@@ -124,6 +125,20 @@ if DATA_SOURCE_ENGINE == "mysql":
         }
     }
     DataSourceBin.process()
+if DATA_SOURCE_ENGINE == "postgresql":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "HOST": DATA_SOURCE_CONFIG.get("host"),
+            "PORT": DATA_SOURCE_CONFIG.get("port"),
+            "USER": DATA_SOURCE_CONFIG.get("username"),
+            "PASSWORD": DATA_SOURCE_CONFIG.get("password"),
+            "NAME": DATA_SOURCE_CONFIG.get("database"),
+            "OPTIONS": {
+                "options": f"-c search_path={DATA_SOURCE_CONFIG.get('schema') if DATA_SOURCE_CONFIG.get('schema') else 'public'}",
+            },
+        }
+    }
 else:
     raise DataSourceError("Unsupported datasource engine")
 
@@ -135,9 +150,7 @@ if CACHE_ENGINE == "redis":
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 "PASSWORD": CACHE_CONFIG.config.get("password"),
-                "CONNECTION_POOL_KWARGS": {
-                    "max_connections": 100
-                }
+                "CONNECTION_POOL_KWARGS": {"max_connections": 100},
             },
         }
     }

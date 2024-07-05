@@ -33,8 +33,3 @@ class DataSourceBin:
                 cursor.execute(f"create database if not exists {db_name} default character set utf8mb4 collate utf8mb4_unicode_ci;")
         finally:
             conn.close()
-            
-        from django.core.cache import cache
-        from django_redis import get_redis_connection
-        
-        

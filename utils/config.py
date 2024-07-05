@@ -27,17 +27,17 @@ class ProjectConfig:
 
     @property
     def environment(self) -> str:
-        journal.info(f"Loading environment from environment variable.")
+        journal.info("Loading environment from environment variable.")
         if os.getenv("ENVIRONMENT").capitalize() == "Product":
-            journal.warning(f"Running in product environment.")
+            journal.warning("Running in product environment.")
             return "product"
         else:
-            journal.warning(f"Running in develop environment.")
+            journal.warning("Running in develop environment.")
             return "develop"
 
     @property
     def debug(self) -> bool:
-        journal.info(f"Loading debug mode from environment variable.")
+        journal.info("Loading debug mode from environment variable.")
         if os.getenv("DEBUG").capitalize() == "True":
             return True
         else:
@@ -45,7 +45,7 @@ class ProjectConfig:
 
     @property
     def allowed_hosts(self) -> List[str]:
-        journal.info(f"Loading allowed hosts from environment variable.")
+        journal.info("Loading allowed hosts from environment variable.")
         allowed_hosts = os.getenv("ALLOWED_HOSTS")
         if allowed_hosts:
             allowed_hosts_list = [item for item in allowed_hosts.split(",")]
@@ -55,27 +55,27 @@ class ProjectConfig:
 
     @property
     def datasource_engine(self) -> str:
-        journal.info(f"Loading data source engine from environment variable.")
+        journal.info("Loading data source engine from environment variable.")
         return os.getenv("DATASOURCE_ENGINE").lower()
 
     @property
     def cache_engine(self) -> str:
-        journal.info(f"Loading cache engine from environment variable.")
+        journal.info("Loading cache engine from environment variable.")
         return os.getenv("CACHE_ENGINE").lower()
 
     @property
     def language_code(self) -> str:
-        journal.info(f"Loading language code from environment variable.")
+        journal.info("Loading language code from environment variable.")
         return os.getenv("LANGUAGE_CODE")
 
     @property
     def time_zone(self) -> str:
-        journal.info(f"Loading time zone from environment variable.")
+        journal.info("Loading time zone from environment variable.")
         return os.getenv("TIME_ZONE")
 
     @property
     def log_level(self) -> str:
-        journal.info(f"Loading log level from environment variable.")
+        journal.info("Loading log level from environment variable.")
         return os.getenv("LOG_LEVEL")
 
 
@@ -97,7 +97,7 @@ class BaseConfig:
 class DataSourceConfig(BaseConfig):
 
     def __init__(self, engine: str, _env: str, config_dir: str):
-        engines = ("mysql",)
+        engines = ("mysql", "postgresql")
         if engine.lower() not in engines:
             raise DataSourceError("Unsupported data source engine.")
         self.engine = engine.lower()

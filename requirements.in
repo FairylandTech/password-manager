@@ -21,3 +21,6 @@ pyyaml
 django-redis
 django-simpleui
 djangorestframework
+# django-multi-schema
+psycopg2
+psycopg2-binary
