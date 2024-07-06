@@ -23,8 +23,3 @@ class ExampleViewSet(
 ):
     queryset = Example.objects.all()
     serializer_class = ExampleSerializer
-
-
-import os
-
-os.environ

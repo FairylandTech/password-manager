@@ -24,3 +24,12 @@ comment on column public_dev_password_manager.test_using.updated_at is 'update t
 
 insert into public_dev_password_manager.test_using (name, age, email)
 values ('Jack', 18, 'jack@example.com');
+
+SELECT "public_dev_password_manager"."test_using"."id",
+       "public_dev_password_manager"."test_using"."name",
+       "public_dev_password_manager"."test_using"."age",
+       "public_dev_password_manager"."test_using"."email",
+       "public_dev_password_manager"."test_using"."description",
+       "public_dev_password_manager"."test_using"."created_at",
+       "public_dev_password_manager"."test_using"."updated_at"
+FROM "public_dev_password_manager"."test_using";

@@ -11,10 +11,12 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from apps.example.views.example import ExampleViewSet
+from apps.example.views.test import Test
 
 router = DefaultRouter()
 router.register(r"test", ExampleViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
+    path(r"apiview", Test.as_view())
 ]

@@ -79,7 +79,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # cache
-    "django.middleware.cache.FetchFromCacheMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "managers.urls"
@@ -134,9 +134,9 @@ if DATA_SOURCE_ENGINE == "postgresql":
             "USER": DATA_SOURCE_CONFIG.get("username"),
             "PASSWORD": DATA_SOURCE_CONFIG.get("password"),
             "NAME": DATA_SOURCE_CONFIG.get("database"),
-            "OPTIONS": {
-                "options": f"-c search_path={DATA_SOURCE_CONFIG.get('schema') if DATA_SOURCE_CONFIG.get('schema') else 'public'}",
-            },
+            # "OPTIONS": {
+            #     "options": f"-c search_path={DATA_SOURCE_CONFIG.get('schema') if DATA_SOURCE_CONFIG.get('schema') else 'public'}",
+            # },
         }
     }
 else:
