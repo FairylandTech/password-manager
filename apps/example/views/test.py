@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 
 from apps.example.models.example import Example
-from apps.example.serializers.test import TestSerializers
+from apps.example.serializers.test import TestSerializers, TestSerializersV2
 from utils.journal import journal
 from rest_framework.response import Response
 
@@ -29,54 +29,62 @@ class Test(APIView):
         data_id = request.query_params.get("id")
         if data_id:
             journal.info("获取一条数据")
-            example = Example.objects.get(pk=data_id)
+            example = Example.objects.filter(status=True).get(pk=data_id)
             _many = False
         else:
             journal.info("获取全部数据")
-            example = Example.objects.all()
+            example = Example.objects.filter(status=True).all().order_by("id")
             _many = True
-            journal.info(f"{example}, 类型: {type(example)}")
-        serializer = TestSerializers(example, many=_many)
+        # serializer = TestSerializers(example, many=_many)
+        serializer = TestSerializersV2(example, many=_many)
+        
         return Response(ApiResponse(serializer.data).results)
 
     def post(self: Self, request: Request):
         journal.info("提交一个数据")
         data = request.data
         from datetime import datetime
-        data.update(
-            create_time=datetime.now().strftime("%Y-%d-%m %H:%M:%S"),
-            update_time=datetime.now().strftime("%Y-%d-%m %H:%M:%S")
-        )
+
+        data.update(create_time=datetime.now(), update_time=datetime.now())
         journal.debug(f"拿到的数据: {data}")
-        serializer = TestSerializers(data=data)
+        # serializer = TestSerializers(data=data)
+        serializer = TestSerializersV2(data=data)
         if serializer.is_valid():
             journal.info(f"校验过的数据: {serializer.validated_data}")
             serializer.save()
             return Response(ApiResponse(serializer.data).results)
         else:
+            journal.error(serializer.error_messages)
             return Response(ApiResponse(serializer.error_messages).results)
 
     def put(self: Self, request: Request):
         journal.info("修改一条数据")
         request_data = request.data
-        if request_data:
-            pk_id = request_data.pop("id")
+        pk_id = request_data.get("id")
+        if pk_id:
             from datetime import datetime
-            request_data.update(update_time=datetime.now().strftime("%Y-%d-%m %H:%M:%S"))
+
+            request_data.update(update_time=datetime.now())
             example = Example.objects.get(pk=pk_id)
-            serializer = TestSerializers(example, data=request_data)
+            # serializer = TestSerializers(example, data=request_data)
+            serializer = TestSerializersV2(example, data=request_data)
             if serializer.is_valid():
-                Example.objects.filter(pk=pk_id).update(**serializer.validated_data)
-                rdata = Example.objects.get(pk=pk_id)
-                return Response(ApiResponse(TestSerializers(rdata, many=False).data).results)
+                serializer.save()
+                return Response(ApiResponse(serializer.data).results)
             else:
                 return Response(ApiResponse(serializer.error_messages).results)
         else:
             return Response(ApiResponse("需要一个ID参数").results)
-"""
-{
-    "id": 2,
-    "age": 21,
-    "description": "我是Alice--修改之后的"
-}
-"""
+
+    def delete(self: Self, request: Request):
+        journal.info("删除一条数据")
+        request_data = request.query_params
+        journal.debug(f"拿到的数据: {request_data}")
+        pk_id = request_data.get("id")
+        if pk_id:
+            if Example.objects.filter(pk=pk_id).update(status=False):
+                return Response(ApiResponse("删除成功").results)
+            else:
+                return Response(ApiResponse("删除失败").results)
+        else:
+            return Response(ApiResponse("需要一个ID参数").results)

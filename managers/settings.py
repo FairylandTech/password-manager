@@ -157,9 +157,9 @@ if CACHE_ENGINE == "redis":
 else:
     raise CacheError("Unsupported cache engine")
 
-CACHE_MIDDLEWARE_ALIAS = "default"
-CACHE_MIDDLEWARE_SECONDS = 60 * 60
-CACHE_MIDDLEWARE_KEY_PREFIX = "password_mamager"
+# CACHE_MIDDLEWARE_ALIAS = "default"
+# CACHE_MIDDLEWARE_SECONDS = 60 * 60
+# CACHE_MIDDLEWARE_KEY_PREFIX = "password_mamager"
 
 SESSION_CACHE_ALIAS = "default"
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
