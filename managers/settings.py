@@ -48,8 +48,9 @@ ALLOWED_HOSTS = PROJECT_CONFIG.allowed_hosts
 # Application definition
 
 INSTALLED_APPS = [
-    # Admin UI
+    # admin UI
     "simpleui",
+    # built-in
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,10 +59,18 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # framework
     "rest_framework",
-    # "django_filters",
-    # "corsheaders",
+    "django_filters",
+    "corsheaders",
+    "django_extensions",
+    "django_celery_results",
+    # security
+    # "rest_framework.authtoken",
+    # "rest_framework_simplejwt.token_blacklist",
+    # "drf_yasg",
+    # "django_celery_beat",
     # cache
     "django_redis",
+    # "django_prometheus",
     # apps
     "apps.example",
     "apps.rbac",
@@ -69,6 +78,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # CORS
+    # "corsheaders.middleware.CorsMiddleware"
     # cache
     "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -222,3 +233,17 @@ LOGGING = {
         },
     },
 }
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_PAGINATION_CLASS": "utils.pagination.StandardResultsSetPagination",
+    "PAGE_SIZE": 3,
+}
+
+# 允许所有的域名
+CORS_ALLOW_ALL_ORIGINS = True
+# 指定的域名
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+# ]

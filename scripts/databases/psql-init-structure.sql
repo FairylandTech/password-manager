@@ -84,14 +84,52 @@ from public_dev_password_manager.test_using_temp;
 
 drop table public_dev_password_manager.test_using_temp;
 
+--------------------------------------------------------------
+-------------------------- 测试表 -----------------------------
+--------------------------------------------------------------
 
-SELECT "public_dev_password_manager"."test_using"."id",
-       "public_dev_password_manager"."test_using"."name",
-       "public_dev_password_manager"."test_using"."age",
-       "public_dev_password_manager"."test_using"."email",
-       "public_dev_password_manager"."test_using"."description",
-       "public_dev_password_manager"."test_using"."exist",
-       "public_dev_password_manager"."test_using"."created_at",
-       "public_dev_password_manager"."test_using"."updated_at"
-FROM "public_dev_password_manager"."test_using"
-WHERE ("public_dev_password_manager"."test_using"."exist" AND "public_dev_password_manager"."test_using"."id" = 1);
+create schema public_dev_test authorization austin;
+
+create table public_dev_test.pubilsh(
+    id serial primary key,
+    name varchar(255) not null unique,
+    area varchar(255) not null,
+    exist boolean not null default true,
+    created_at timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp
+);
+
+comment on table public_dev_test.pubilsh is '出版社表';
+comment on column public_dev_test.pubilsh.id is '主键ID';
+comment on column public_dev_test.pubilsh.name is '出版社名字';
+comment on column public_dev_test.pubilsh.area is '出版社地区';
+comment on column public_dev_test.pubilsh.exist is '数据状态';
+comment on column public_dev_test.pubilsh.created_at is '创建时间';
+comment on column public_dev_test.pubilsh.updated_at is '修改时间';
+
+create table public_dev_test.author(
+    id serial primary key,
+    name varchar(255) not null,
+    gender boolean not null,
+    birthday date not null default current_date,
+    description text,
+    exist boolean not null default true,
+    created_at timestamp not null default current_timestamp,
+    updated_at timestamp not null default current_timestamp
+);
+
+comment on table public_dev_test.author is '作者表';
+comment on column public_dev_test.author.id is '主键ID';
+comment on column public_dev_test.author.name is '作者名字';
+comment on column public_dev_test.author.gender is '性别: true=1=男, false=0=女';
+comment on column public_dev_test.author.birthday is '出生日期';
+comment on column public_dev_test.author.description is '描述';
+comment on column public_dev_test.author.exist is '数据状态';
+comment on column public_dev_test.author.created_at is '创建时间';
+comment on column public_dev_test.author.updated_at is '修改时间';
+
+insert into public_dev_test.pubilsh (name, area)
+values ('香梨出版社', '北京'), ('雪梨出版社', '广州');
+
+insert into public_dev_test.author (name, gender, birthday)
+values ('姜添池', true, '1998-01-24'), ('陈欣宜', false, '2001-3-9');

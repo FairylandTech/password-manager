@@ -37,7 +37,7 @@ class Test(APIView):
             _many = True
         # serializer = TestSerializers(example, many=_many)
         serializer = TestSerializersV2(example, many=_many)
-        
+
         return Response(ApiResponse(serializer.data).results)
 
     def post(self: Self, request: Request):
