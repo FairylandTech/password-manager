@@ -31,4 +31,10 @@ django-tenant-schemas
 django-tenants
 django-extensions
 django-celery-results
+drf-yasg
+drf-spectacular
+coreapi
+pygments
+markdown
+uritemplate
 # django-multi-schema

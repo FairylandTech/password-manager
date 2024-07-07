@@ -7,12 +7,23 @@
 @since: 2024-07-06 03:36:21 UTC+8
 """
 
+from rest_framework import status
 
-class ApiResponse:
 
-    def __init__(self, serializer_data):
-        self.serizlizer_data = serializer_data
+class APIResults:
 
-    @property
-    def results(self):
-        return {"status": "success", "code": 200, "data": self.serizlizer_data}
+    @staticmethod
+    def success(data, code=status.HTTP_200_OK, message="success"):
+        return {"status": "success", "code": code, "data": data, "message": message}
+
+    @staticmethod
+    def error(message, code=status.HTTP_400_BAD_REQUEST):
+        return {"status": "error", "code": code, "data": None, "message": message}
+
+    @staticmethod
+    def redirect(url):
+        return {"status": "redirect", "code": status.HTTP_302_FOUND, "url": url}
+
+    @staticmethod
+    def redirect_to_detail(url):
+        return {"detail": "Redirecting...", "Location": url}

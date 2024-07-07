@@ -16,7 +16,6 @@ class PublishModelFilter(django_filters.FilterSet):
 
     name = django_filters.CharFilter("name", lookup_expr="icontains", label="出版社名称")
     ares = django_filters.CharFilter("area", label="地区")
-    # status = django_filters.BooleanFilter("expired")
     # status = django_filters.BooleanFilter("enabled")
     # status = django_filters.BooleanFilter("existence")
     status = django_filters.BooleanFilter("exist", label="数据是否存在")

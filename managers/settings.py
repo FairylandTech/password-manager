@@ -63,11 +63,13 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_extensions",
     "django_celery_results",
+    # "django_celery_beat",
     # security
     # "rest_framework.authtoken",
     # "rest_framework_simplejwt.token_blacklist",
-    # "drf_yasg",
-    # "django_celery_beat",
+    # API document
+    "drf_yasg",
+    "drf_spectacular",
     # cache
     "django_redis",
     # "django_prometheus",
@@ -78,6 +80,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Custom middleware
+    "utils.middlewares.SplitRequestMiddleware",
     # CORS
     # "corsheaders.middleware.CorsMiddleware"
     # cache
@@ -204,12 +208,16 @@ TIME_ZONE = PROJECT_CONFIG.time_zone
 
 USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -238,6 +246,8 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PAGINATION_CLASS": "utils.pagination.StandardResultsSetPagination",
     "PAGE_SIZE": 3,
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    # "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # 允许所有的域名
@@ -247,3 +257,5 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "http://localhost:3000",
 #     "http://127.0.0.1:3000",
 # ]
+
+APPEND_SLASH = False

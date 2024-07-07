@@ -20,7 +20,7 @@ from apps.example.serializers.test import TestSerializers, TestSerializersV2
 from utils.journal import journal
 from rest_framework.response import Response
 
-from utils.api import ApiResponse
+from utils.api import APIResults
 
 
 class Test(APIView):
@@ -38,7 +38,7 @@ class Test(APIView):
         # serializer = TestSerializers(example, many=_many)
         serializer = TestSerializersV2(example, many=_many)
 
-        return Response(ApiResponse(serializer.data).results)
+        return Response(APIResults.success(serializer.data))
 
     def post(self: Self, request: Request):
         journal.info("提交一个数据")
@@ -52,10 +52,10 @@ class Test(APIView):
         if serializer.is_valid():
             journal.info(f"校验过的数据: {serializer.validated_data}")
             serializer.save()
-            return Response(ApiResponse(serializer.data).results)
+            return Response(APIResults.success(serializer.data))
         else:
-            journal.error(serializer.error_messages)
-            return Response(ApiResponse(serializer.error_messages).results)
+            journal.error(serializer.errors)
+            return Response(APIResults.error(serializer.errors))
 
     def put(self: Self, request: Request):
         journal.info("修改一条数据")
@@ -70,11 +70,11 @@ class Test(APIView):
             serializer = TestSerializersV2(example, data=request_data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(ApiResponse(serializer.data).results)
+                return Response(APIResults.success(serializer.data))
             else:
-                return Response(ApiResponse(serializer.error_messages).results)
+                return Response(APIResults.error(serializer.errors))
         else:
-            return Response(ApiResponse("需要一个ID参数").results)
+            return Response(APIResults.error("Request data need id."))
 
     def delete(self: Self, request: Request):
         journal.info("删除一条数据")
@@ -83,8 +83,8 @@ class Test(APIView):
         pk_id = request_data.get("id")
         if pk_id:
             if Example.objects.filter(pk=pk_id).update(status=False):
-                return Response(ApiResponse("删除成功").results)
+                return Response(APIResults.success())
             else:
-                return Response(ApiResponse("删除失败").results)
+                return Response(APIResults.error("Delete failed."))
         else:
-            return Response(ApiResponse("需要一个ID参数").results)
+            return Response(APIResults.error("Request data need id."))

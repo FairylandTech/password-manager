@@ -28,9 +28,9 @@ class AuthorModelGenderField(serializers.Field):
             raise serializers.ValidationError("性别必须是 '男' 或 '女'")
 
 
-class PublishSerializers(serializers.ModelSerializer):
-    create_time = serializers.DateTimeField(required=False, read_only=True, format="%Y-%d-%m %H:%M:%S", help_text="创建时间")
-    update_time = serializers.DateTimeField(read_only=True, format="%Y-%d-%m %H:%M:%S", help_text="修改时间")
+class PublishSerializer(serializers.ModelSerializer):
+    create_time = serializers.DateTimeField(required=False, read_only=True, format="%Y-%d-%m %H:%M:%S")
+    update_time = serializers.DateTimeField(read_only=True, format="%Y-%d-%m %H:%M:%S")
 
     class Meta:
         model = PublishModel
@@ -42,11 +42,12 @@ class PublishSerializers(serializers.ModelSerializer):
         return PublishModel.objects.create(**validated_data)
 
 
-class AuthorSerializers(serializers.ModelSerializer):
-    gender = AuthorModelGenderField(help_text="性别")
-    age = serializers.SerializerMethodField(required=False, read_only=True, help_text="年龄")
-    create_time = serializers.DateTimeField(required=False, read_only=True, format="%Y-%d-%m %H:%M:%S", help_text="创建时间")
-    update_time = serializers.DateTimeField(read_only=True, format="%Y-%d-%m %H:%M:%S", help_text="修改时间")
+class AuthorSerializer(serializers.ModelSerializer):
+    gender = AuthorModelGenderField(label="性别")
+    age = serializers.SerializerMethodField(required=False, read_only=True, label="年龄")
+    birthday = serializers.DateField(required=True, format="%Y-%m-%d", label="出生日期")
+    create_time = serializers.DateTimeField(required=False, read_only=True, format="%Y-%d-%m %H:%M:%S", label="创建时间")
+    update_time = serializers.DateTimeField(read_only=True, format="%Y-%d-%m %H:%M:%S", label="修改时间")
 
     def get_age(self, model: AuthorModel):
         today = datetime.today()
@@ -55,6 +56,11 @@ class AuthorSerializers(serializers.ModelSerializer):
     def validate_description(self, value):
         if value == "":
             return None
+        return value
+
+    def validate_birthday(self, value):
+        if value > datetime.today().date():
+            raise serializers.ValidationError("生日不能晚于当前日期")
         return value
 
     class Meta:

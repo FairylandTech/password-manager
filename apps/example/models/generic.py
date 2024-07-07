@@ -29,7 +29,7 @@ class AuthorModel(models.Model):
     name = models.CharField(db_column="name", max_length=255, verbose_name="作者名字")
     gender = models.BooleanField(db_column="gender", verbose_name="性别")  # true=1=男, false=0=女
     birthday = models.DateField(db_column="birthday", verbose_name="出生日期")
-    description = models.TextField(db_column="description", null=True, default=None, blank=True, verbose_name="描述")
+    description = models.TextField(db_column="description", default=None, blank=True, verbose_name="描述")
     status = models.BooleanField(db_column="exist", default=True, blank=True, verbose_name="数据状态")
     create_time = models.DateTimeField(db_column="created_at", auto_now_add=True, blank=True, verbose_name="创建时间")
     update_time = models.DateTimeField(db_column="updated_at", auto_now=True, verbose_name="修改时间")
