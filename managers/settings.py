@@ -48,8 +48,9 @@ ALLOWED_HOSTS = PROJECT_CONFIG.allowed_hosts
 # Application definition
 
 INSTALLED_APPS = [
-    # Admin UI
+    # admin UI
     "simpleui",
+    # built-in
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,10 +59,20 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # framework
     "rest_framework",
-    # "django_filters",
-    # "corsheaders",
+    "django_filters",
+    "corsheaders",
+    "django_extensions",
+    "django_celery_results",
+    # "django_celery_beat",
+    # security
+    # "rest_framework.authtoken",
+    # "rest_framework_simplejwt.token_blacklist",
+    # API document
+    "drf_yasg",
+    "drf_spectacular",
     # cache
     "django_redis",
+    # "django_prometheus",
     # apps
     "apps.example",
     "apps.rbac",
@@ -69,6 +80,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Custom middleware
+    "utils.middlewares.SplitRequestMiddleware",
+    # CORS
+    # "corsheaders.middleware.CorsMiddleware"
     # cache
     "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -79,7 +94,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # cache
-    "django.middleware.cache.FetchFromCacheMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "managers.urls"
@@ -134,9 +149,9 @@ if DATA_SOURCE_ENGINE == "postgresql":
             "USER": DATA_SOURCE_CONFIG.get("username"),
             "PASSWORD": DATA_SOURCE_CONFIG.get("password"),
             "NAME": DATA_SOURCE_CONFIG.get("database"),
-            "OPTIONS": {
-                "options": f"-c search_path={DATA_SOURCE_CONFIG.get('schema') if DATA_SOURCE_CONFIG.get('schema') else 'public'}",
-            },
+            # "OPTIONS": {
+            #     "options": f"-c search_path={DATA_SOURCE_CONFIG.get('schema') if DATA_SOURCE_CONFIG.get('schema') else 'public'}",
+            # },
         }
     }
 else:
@@ -157,9 +172,9 @@ if CACHE_ENGINE == "redis":
 else:
     raise CacheError("Unsupported cache engine")
 
-CACHE_MIDDLEWARE_ALIAS = "default"
-CACHE_MIDDLEWARE_SECONDS = 60 * 60
-CACHE_MIDDLEWARE_KEY_PREFIX = "password_mamager"
+# CACHE_MIDDLEWARE_ALIAS = "default"
+# CACHE_MIDDLEWARE_SECONDS = 60 * 60
+# CACHE_MIDDLEWARE_KEY_PREFIX = "password_mamager"
 
 SESSION_CACHE_ALIAS = "default"
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -193,12 +208,16 @@ TIME_ZONE = PROJECT_CONFIG.time_zone
 
 USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -222,3 +241,21 @@ LOGGING = {
         },
     },
 }
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_PAGINATION_CLASS": "utils.pagination.StandardResultsSetPagination",
+    "PAGE_SIZE": 3,
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    # "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# 允许所有的域名
+CORS_ALLOW_ALL_ORIGINS = True
+# 指定的域名
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+# ]
+
+APPEND_SLASH = False

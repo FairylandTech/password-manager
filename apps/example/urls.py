@@ -10,11 +10,22 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
+from apps.example.views.test import Test
 from apps.example.views.example import ExampleViewSet
+from apps.example.views.generic import PublishViewSet, AuthorViewSet
+from apps.example.views.generic import PublishAPIView, AuthorAPIView
+from apps.example.views.generic import AuthorDetailAPIView
 
 router = DefaultRouter()
-router.register(r"test", ExampleViewSet)
+router.trailing_slash = ""
+router.register(r"example", ExampleViewSet)
+router.register(r"publish", PublishViewSet)
+router.register(r"author", AuthorViewSet)
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path(r"drf/", include(router.urls)),
+    path(r"apiview", Test.as_view()),
+    path(r"publish-apiview", PublishAPIView.as_view()),
+    path(r"author-apiview", AuthorAPIView.as_view()),
+    path(r"author-apiview/<int:pk>", AuthorDetailAPIView.as_view()),
 ]

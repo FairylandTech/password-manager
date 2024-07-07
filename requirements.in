@@ -15,12 +15,26 @@ pyfairylandfuture==1.0.0
 
 setuptools
 python-dotenv
-django
-pymysql
 pyyaml
-django-redis
-django-simpleui
-djangorestframework
-# django-multi-schema
+
+pymysql
 psycopg2
 psycopg2-binary
+
+django
+django-redis
+django-filter
+django-cors-headers
+djangorestframework
+django-simpleui
+django-tenant-schemas
+django-tenants
+django-extensions
+django-celery-results
+drf-yasg
+drf-spectacular
+coreapi
+pygments
+markdown
+uritemplate
+# django-multi-schema
