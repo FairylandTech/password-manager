@@ -11,7 +11,7 @@ pylama
 pigar
 pipdeptree
 
-pyfairylandfuture==1.0.0
+pyfairylandfuture==1.1.0
 
 setuptools
 python-dotenv

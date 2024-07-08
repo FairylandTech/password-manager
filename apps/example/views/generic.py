@@ -124,6 +124,7 @@ class AuthorDetailAPIView(GenericAPIView):
         journal.info(f"View: Author detail, pk: {repr(kwargs.get('pk'))}")
         try:
             serializer: AuthorSerializer = self.get_serializer(self.get_object(), many=False)
+            journal.debug(f"serializer data: {serializer.data}, type: {type(serializer.data)}")
             return Response(APIResults.success(serializer.data))
         except Exception as err:
             journal.warning(f"{err}")

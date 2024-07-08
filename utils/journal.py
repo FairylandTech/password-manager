@@ -9,10 +9,10 @@
 
 import logging
 
-from fairylandfuture.utils.journal import Journal
+from fairylandfuture.modules.journal import Journal
 
-# journal: Journal = Journal(serialize=True)
-journal: Journal = Journal(debug=True, serialize=True)
+journal: Journal = Journal(serialize=True)
+# journal: Journal = Journal(debug=True, serialize=True)
 
 
 class JournalHandler(logging.Handler):

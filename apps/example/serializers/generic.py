@@ -54,11 +54,11 @@ class PublishSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(required=False, read_only=True, label="ID")
-    name = serializers.CharField(max_length=255, label="姓名")
-    sex = AuthorModelGenderField(source="gender", choices=AuthorModelGenderChoices.choices, label="性别")
-    age = serializers.SerializerMethodField(required=False, read_only=True, label="年龄")
-    birthday = serializers.DateField(format=_DATE_FORMAT, label="出生日期")
-    description = serializers.CharField(required=False, allow_null=True, allow_blank=True, default=None, label="描述")
+    name = serializers.CharField(max_length=255, label="作者姓名")
+    sex = AuthorModelGenderField(source="gender", choices=AuthorModelGenderChoices.choices, label="作者性别")
+    age = serializers.SerializerMethodField(required=False, read_only=True, label="作者年龄")
+    birthday = serializers.DateField(format=_DATE_FORMAT, label="作者出生日期")
+    description = serializers.CharField(required=False, allow_null=True, allow_blank=True, default=None, label="作者描述")
     create_time = serializers.DateTimeField(required=False, read_only=True, format=_DATETIME_FORMAT, label="创建时间")
     update_time = serializers.DateTimeField(read_only=True, format=_DATETIME_FORMAT, label="修改时间")
 
@@ -75,6 +75,9 @@ class AuthorSerializer(serializers.ModelSerializer):
         if value > datetime.today().date():
             raise serializers.ValidationError("生日不能晚于当前日期")
         return value
+
+    def validate(self, attrs):
+        return super().validate(attrs)
 
     class Meta:
         model = AuthorModel
