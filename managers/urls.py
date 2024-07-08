@@ -29,9 +29,9 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="password-manager API",
-        default_version="v1",
-        description="password-manager API",
+        title="OpenAPI - password-manager",
+        default_version="v1.0.0 rc",
+        # description="password-manager Open API",
         terms_of_service="https://fairy.host/",
         contact=openapi.Contact(email="fairylandfuture@outlook.com"),
         license=openapi.License(name="AGPL-3.0"),
@@ -44,11 +44,11 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url="static/favicon.ico")),
     # 基于Django Rest Framework的API文档
-    path("docs/drf-docs/", include_docs_urls(title="API Interface Documentation.")),
+    path("docs/drf-docs", include_docs_urls(title="API Interface Documentation.")),
     # 基于drf_yasg的API文档
-    path("docs/swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="docs-swagger-ui"),
-    path("docs/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="docs-redoc"),
-    re_path(r"^docs/swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="docs-swagger-schema-json|yaml"),
+    path("docs/swagger", schema_view.with_ui("swagger", cache_timeout=0), name="docs-swagger-ui"),
+    path("docs/redoc", schema_view.with_ui("redoc", cache_timeout=0), name="docs-redoc"),
+    # re_path(r"^docs/swagger/(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="docs-swagger-schema-json|yaml"),
     # 基于drf_spectacular的API文档
     # path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

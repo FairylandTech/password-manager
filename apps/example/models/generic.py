@@ -20,21 +20,21 @@ class PublishModel(models.Model):
 
     class Meta:
         db_table = 'public_dev_test"."pubilsh'
-        verbose_name = "出版社表"
+        verbose_name = "出版社"
         verbose_name_plural = verbose_name
 
 
 class AuthorModel(models.Model):
 
-    name = models.CharField(db_column="name", max_length=255, verbose_name="作者名字")
-    gender = models.BooleanField(db_column="gender", verbose_name="性别")  # true=1=男, false=0=女
-    birthday = models.DateField(db_column="birthday", verbose_name="出生日期")
-    description = models.TextField(db_column="description", default=None, blank=True, verbose_name="描述")
-    status = models.BooleanField(db_column="exist", default=True, blank=True, verbose_name="数据状态")
-    create_time = models.DateTimeField(db_column="created_at", auto_now_add=True, blank=True, verbose_name="创建时间")
+    name = models.CharField(db_column="name", max_length=255, verbose_name="作者姓名")
+    gender = models.BooleanField(db_column="gender", verbose_name="作者性别", choices=((True, "男"), (False, "女")))  # true=1=男, false=0=女
+    birthday = models.DateField(db_column="birthday", verbose_name="作者出生日期")
+    description = models.TextField(db_column="description", null=True, default=None, blank=True, verbose_name="作者描述")
+    status = models.BooleanField(db_column="exist", default=True, verbose_name="数据状态")
+    create_time = models.DateTimeField(db_column="created_at", auto_now_add=True, verbose_name="创建时间")
     update_time = models.DateTimeField(db_column="updated_at", auto_now=True, verbose_name="修改时间")
 
     class Meta:
         db_table = 'public_dev_test"."author'
-        verbose_name = "作者表"
+        verbose_name = "作者"
         verbose_name_plural = verbose_name
