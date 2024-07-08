@@ -54,7 +54,7 @@ class AuthorViewSet(
             results = self.list(request, *args, **kwargs)
             return Response(APIResults.success(results, code=status.HTTP_200_OK), status=status.HTTP_200_OK)
         except Exception as err:
-            journal.error(err)
+            journal.error(f"{err}")
             return Response(APIResults.error("Data does not exist."))
 
 
@@ -96,7 +96,7 @@ class AuthorAPIView(GenericAPIView, mixins.ListModelMixin):
             results_mixin = self.list(request, *args, **kwargs)
             return Response(APIResults.success(results_mixin.data, code=status.HTTP_200_OK), status=status.HTTP_200_OK)
         except Exception as err:
-            journal.error(err)
+            journal.error(f"{err}")
             return Response(APIResults.error("Data does not exist."))
 
     def post(self: Self, request: Request):
@@ -125,11 +125,11 @@ class AuthorDetailAPIView(GenericAPIView):
             serializer: AuthorSerializer = self.get_serializer(self.get_object(), many=False)
             return Response(APIResults.success(serializer.data))
         except Exception as err:
-            journal.warning(err)
+            journal.warning(f"{err}")
             return Response(APIResults.error("Data does not exist."))
 
     def _update(self: Self, request: Request, partial=False, *args: Any, **kwargs: Any):
-        journal.info(f"View: Author update, pk: {repr(kwargs.get('pk'))}")
+        journal.info(f"View: Author update. Params: {args}, {kwargs}")
         try:
             instance: AuthorModel = self.get_object()
             journal.debug(f"Original Object update before: {repr(self.get_serializer(instance).data)}")
@@ -143,7 +143,7 @@ class AuthorDetailAPIView(GenericAPIView):
                 journal.error(serializer.errors)
                 return Response(APIResults.error(serializer.errors))
         except Exception as err:
-            journal.error(err)
+            journal.error(f"{err}")
             return Response(APIResults.error("Data update failed."))
 
     def put(self: Self, request: Request, *args: Any, **kwargs: Any):
@@ -160,5 +160,32 @@ class AuthorDetailAPIView(GenericAPIView):
             journal.info(f"Data deleted: {repr(instance)}")
             return Response(APIResults.success("Data deleted.", code=status.HTTP_204_NO_CONTENT), status=status.HTTP_204_NO_CONTENT)
         except Exception as err:
-            journal.error(err)
+            journal.error(f"{err}")
             return Response(APIResults.error("Data delete failed."))
+
+
+class PseudoCodeAPIViewSet(viewsets.ViewSet):
+
+    def get_all(self: Self, request: Request):
+        journal.info(f"ViewSet: AuthorAPIViewSet get all data., method: {request.method}")
+        return Response(APIResults.success("Get all data."))
+
+    def create_data(self: Self, request: Request):
+        journal.info(f"ViewSet: AuthorAPIViewSet create data., method: {request.method}")
+        return Response(APIResults.success("Create data."))
+
+    def get_data(self: Self, request: Request, pk: int):
+        journal.info(f"ViewSet: AuthorAPIViewSet get data by pk: {pk}, method: {request.method}")
+        return Response(APIResults.success(f"Get data by pk: {pk}."))
+
+    def update_data_all(self: Self, request: Request, pk: int):
+        journal.info(f"ViewSet: AuthorAPIViewSet update data by pk: {pk}, method: {request.method}")
+        return Response(APIResults.success(f"Update data all by pk: {pk}."))
+
+    def update_data_partial(self: Self, request: Request, pk: int):
+        journal.info(f"ViewSet: AuthorAPIViewSet update data partial by pk: {pk}, method: {request.method}")
+        return Response(APIResults.success(f"Update data partial by pk: {pk}."))
+
+    def delete_data(self: Self, request: Request, pk: int):
+        journal.info(f"ViewSet: AuthorAPIViewSet delete data by pk: {pk}, method: {request.method}")
+        return Response(APIResults.success(f"Delete data by pk: {pk}."))

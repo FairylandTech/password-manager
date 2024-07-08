@@ -15,6 +15,7 @@ from apps.example.views.example import ExampleViewSet
 from apps.example.views.generic import PublishViewSet, AuthorViewSet
 from apps.example.views.generic import PublishAPIView, AuthorAPIView
 from apps.example.views.generic import AuthorDetailAPIView
+from apps.example.views.generic import PseudoCodeAPIViewSet
 
 router = DefaultRouter()
 router.trailing_slash = ""
@@ -28,4 +29,6 @@ urlpatterns = [
     path(r"publish-apiview", PublishAPIView.as_view()),
     path(r"author-apiview", AuthorAPIView.as_view()),
     path(r"author-apiview/<int:pk>", AuthorDetailAPIView.as_view()),
+    path(r"pseudo-code", PseudoCodeAPIViewSet.as_view({"get": "get_all", "post": "create_data"})),
+    path(r"pseudo-code/<int:pk>", PseudoCodeAPIViewSet.as_view({"get": "get_data", "put": "update_data_all", "patch": "update_data_partial", "delete": "delete_data"})),
 ]
