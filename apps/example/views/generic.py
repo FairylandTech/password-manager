@@ -7,9 +7,11 @@
 @since: 2024-07-06 20:48:52 UTC+8
 """
 
-from typing import Self, Any
+from typing import Self, Any, Union, Dict
 from datetime import datetime
 
+import django.http.request
+import rest_framework.response
 from rest_framework import viewsets, mixins, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.request import Request
@@ -85,7 +87,7 @@ class PublishAPIView(GenericAPIView):
 
 class AuthorAPIView(GenericAPIView, mixins.ListModelMixin):
 
-    queryset = AuthorModel.objects.all().order_by("-update_time", "-id")
+    queryset = AuthorModel.objects.all().order_by("-birthday", "-id")
     serializer_class = AuthorSerializer
 
     def get(self: Self, request: Request, *args: Any, **kwargs: Any):
@@ -101,8 +103,7 @@ class AuthorAPIView(GenericAPIView, mixins.ListModelMixin):
 
     def post(self: Self, request: Request):
         journal.info(f"View: Author create: data: {request.data}")
-        request_data = request.data
-        request_data = dict(request_data.dict())
+        request_data = request.data.dict() if isinstance(request.data, django.http.request.QueryDict) else request.data
         request_data.update(create_time=datetime.now(), update_time=datetime.now())
         serializer: AuthorSerializer = self.get_serializer(data=request_data)
         if serializer.is_valid():
@@ -133,8 +134,9 @@ class AuthorDetailAPIView(GenericAPIView):
         try:
             instance: AuthorModel = self.get_object()
             journal.debug(f"Original Object update before: {repr(self.get_serializer(instance).data)}")
-            journal.debug(f"Request data: {request.data}")
-            serializer: AuthorSerializer = self.get_serializer(instance, data=request.data, partial=partial)
+            request_data = request.data.dict() if isinstance(request.data, django.http.request.QueryDict) else request.data
+            journal.debug(f"Request data: {request_data}")
+            serializer: AuthorSerializer = self.get_serializer(instance, data=request_data, partial=partial)
             if serializer.is_valid():
                 journal.debug(f"Validated data: {serializer.validated_data}")
                 serializer.save()
