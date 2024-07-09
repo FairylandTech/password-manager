@@ -12,6 +12,9 @@ from datetime import datetime
 from rest_framework import serializers
 
 from apps.example.models.generic import PublishModel, AuthorModel
+from apps.example.models.generic import UserGroupModel, UserModel
+
+from utils.journal import journal
 
 
 _DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -62,9 +65,9 @@ class AuthorSerializer(serializers.ModelSerializer):
     create_time = serializers.DateTimeField(required=False, read_only=True, format=_DATETIME_FORMAT, label="创建时间")
     update_time = serializers.DateTimeField(read_only=True, format=_DATETIME_FORMAT, label="修改时间")
 
-    def get_age(self, model: AuthorModel):
+    def get_age(self, instance: AuthorModel):
         today = datetime.today()
-        return today.year - model.birthday.year - ((today.month, today.day) < (model.birthday.month, model.birthday.day))
+        return today.year - instance.birthday.year - ((today.month, today.day) < (instance.birthday.month, instance.birthday.day))
 
     def validate_description(self, value):
         if value == "":
@@ -80,3 +83,40 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = AuthorModel
         fields = ("id", "name", "sex", "age", "birthday", "description", "create_time", "update_time")
         # exclude = ("status", "gender")
+
+
+class UserGroupModelSerializer(serializers.ModelSerializer):
+
+    _DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+    id = serializers.IntegerField(source="pkid", required=False, read_only=True, label="ID")
+    name = serializers.CharField(max_length=255, label="用户组名")
+    create_time = serializers.DateTimeField(required=False, read_only=True, format=_DATETIME_FORMAT, label="创建时间")
+    update_time = serializers.DateTimeField(required=False, read_only=True, format=_DATETIME_FORMAT, label="修改时间")
+
+    class Meta:
+        model = UserGroupModel
+        fields = ["id", "name", "create_time", "update_time"]
+
+    def validate_name(self, value):
+        if UserGroupModel.objects.filter(name=value).exists():
+            raise serializers.ValidationError("This name already exists.")
+        return value
+
+    def create(self, validated_data):
+        # POST -> form-data : validated_data 是 dict
+        # POST -> application/json : validated_data 是 dict
+        # POST -> application/x-www-form-urlencoded : validated_data 是 dict
+        journal.debug(f"Create >>> validated data: {validated_data}, type is {type(validated_data)}")
+        if "create_time" not in validated_data:
+            validated_data.update(create_time=datetime.now())
+        if "update_time" not in validated_data:
+            validated_data.update(update_time=datetime.now())
+
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        journal.debug(f"Update >>> validated data: {validated_data}, type is {type(validated_data)}")
+        validated_data.update(update_time=datetime.now(tz=))
+
+        return super().update(instance, validated_data)

@@ -24,6 +24,8 @@ from apps.example.serializers.test import TestSerializersV2
 from utils.api import APIResults
 from utils.journal import journal
 from utils.pagination import StandardResultsSetPagination
+from apps.example.models.generic import UserGroupModel
+from apps.example.serializers.generic import UserGroupModelSerializer
 
 
 class PublishViewSet(
@@ -191,3 +193,15 @@ class PseudoCodeAPIViewSet(viewsets.ViewSet):
     def delete_data(self: Self, request: Request, pk: int):
         journal.info(f"ViewSet: AuthorAPIViewSet delete data by pk: {pk}, method: {request.method}")
         return Response(APIResults.success(f"Delete data by pk: {pk}."))
+
+
+class SimpleUserGroupViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = UserGroupModel.objects.all()
+    serializer_class = UserGroupModelSerializer

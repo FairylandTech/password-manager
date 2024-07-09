@@ -17,11 +17,15 @@ from apps.example.views.generic import PublishAPIView, AuthorAPIView
 from apps.example.views.generic import AuthorDetailAPIView
 from apps.example.views.generic import PseudoCodeAPIViewSet
 
+from apps.example.views.generic import SimpleUserGroupViewSet
+
+
 router = DefaultRouter()
 router.trailing_slash = ""
 router.register(r"example", ExampleViewSet)
 router.register(r"publish", PublishViewSet)
 router.register(r"author", AuthorViewSet)
+router.register(r"usergroup", SimpleUserGroupViewSet)
 
 urlpatterns = [
     path(r"drf/", include(router.urls)),
