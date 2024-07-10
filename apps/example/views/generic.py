@@ -24,8 +24,8 @@ from apps.example.serializers.test import TestSerializersV2
 from utils.api import APIResults
 from utils.journal import journal
 from utils.pagination import StandardResultsSetPagination
-from apps.example.models.generic import UserGroupModel
-from apps.example.serializers.generic import UserGroupModelSerializer
+from apps.example.models.generic import UserGroupModel, UserModel
+from apps.example.serializers.generic import UserGroupModelSerializer, UserModelSerializer
 
 
 class PublishViewSet(
@@ -205,3 +205,15 @@ class SimpleUserGroupViewSet(
 ):
     queryset = UserGroupModel.objects.all()
     serializer_class = UserGroupModelSerializer
+
+
+class SimpleUserViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = UserModel.objects.all()
+    serializer_class = UserModelSerializer

@@ -7,7 +7,7 @@
 @since: 2024-07-06 23:45:52 UTC+8
 """
 
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 from rest_framework import serializers
 
@@ -76,7 +76,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     def validate_birthday(self, value):
         if value > datetime.today().date():
-            raise serializers.ValidationError("生日不能晚于当前日期")
+            raise serializers.ValidationError("不能晚于当前日期")
         return value
 
     class Meta:
@@ -109,14 +109,65 @@ class UserGroupModelSerializer(serializers.ModelSerializer):
         # POST -> application/x-www-form-urlencoded : validated_data 是 dict
         journal.debug(f"Create >>> validated data: {validated_data}, type is {type(validated_data)}")
         if "create_time" not in validated_data:
-            validated_data.update(create_time=datetime.now())
+            validated_data.update(create_time=datetime.now(tz=timezone(timedelta(hours=8), name="Asia/Shanghai")))
         if "update_time" not in validated_data:
-            validated_data.update(update_time=datetime.now())
+            validated_data.update(update_time=datetime.now(tz=timezone(timedelta(hours=8), name="Asia/Shanghai")))
 
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
         journal.debug(f"Update >>> validated data: {validated_data}, type is {type(validated_data)}")
-        validated_data.update(update_time=datetime.now(tz=))
+        validated_data.update(update_time=datetime.now(tz=timezone(timedelta(hours=8), name="Asia/Shanghai")))
+
+        return super().update(instance, validated_data)
+
+
+class UserModelSerializer(serializers.ModelSerializer):
+
+    _DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+    id = serializers.IntegerField(source="pkid", required=False, read_only=True, label="ID")
+    username = serializers.CharField(max_length=255, label="用户名")
+    password = serializers.CharField(max_length=255, label="密码")
+    email = serializers.EmailField(max_length=255, label="邮箱地址")
+    group_id = serializers.IntegerField(source="group.pkid", required=False, label="用户组ID")
+    group = serializers.CharField(source="group.name", required=False, read_only=True, label="用户组")
+    create_time = serializers.DateTimeField(required=False, read_only=True, format=_DATETIME_FORMAT, label="创建时间")
+    update_time = serializers.DateTimeField(required=False, read_only=True, format=_DATETIME_FORMAT, label="修改时间")
+
+    class Meta:
+        model = UserModel
+        fields = ("id", "username", "password", "email", "create_time", "update_time", "group_id", "group")
+
+    def validate_username(self, value):
+        if UserModel.objects.filter(username=value).exists():
+            raise serializers.ValidationError("重复用户名")
+        return value
+
+    def validate_email(self, value):
+        if UserModel.objects.filter(email=value).exists():
+            raise serializers.ValidationError("重复邮箱")
+        return value
+
+    def validate_group_id(self, value):
+        if not UserGroupModel.objects.filter(pkid=value).exists():
+            raise serializers.ValidationError("没有组")
+        return value
+
+    def create(self, validated_data):
+        # POST -> form-data : validated_data 是 dict
+        # POST -> application/json : validated_data 是 dict
+        # POST -> application/x-www-form-urlencoded : validated_data 是 dict
+        journal.debug(f"Create >>> validated data: {validated_data}, type is {type(validated_data)}")
+        if "create_time" not in validated_data:
+            validated_data.update(create_time=datetime.now(tz=timezone(timedelta(hours=8), name="Asia/Shanghai")))
+        if "update_time" not in validated_data:
+            validated_data.update(update_time=datetime.now(tz=timezone(timedelta(hours=8), name="Asia/Shanghai")))
+
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        journal.debug(f"Update >>> validated data: {validated_data}, type is {type(validated_data)}")
+        validated_data.update(update_time=datetime.now(tz=timezone(timedelta(hours=8), name="Asia/Shanghai")))
 
         return super().update(instance, validated_data)

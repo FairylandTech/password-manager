@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-from fairylandfuture.utils.journal import journal
+from utils.journal import journal
 
 from utils.config import DataSourceConfig, ProjectConfig, CacheConfig
 from utils.exceptions import DataSourceError, CacheError

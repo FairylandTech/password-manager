@@ -17,7 +17,7 @@ from apps.example.views.generic import PublishAPIView, AuthorAPIView
 from apps.example.views.generic import AuthorDetailAPIView
 from apps.example.views.generic import PseudoCodeAPIViewSet
 
-from apps.example.views.generic import SimpleUserGroupViewSet
+from apps.example.views.generic import SimpleUserGroupViewSet, SimpleUserViewSet
 
 
 router = DefaultRouter()
@@ -26,6 +26,7 @@ router.register(r"example", ExampleViewSet)
 router.register(r"publish", PublishViewSet)
 router.register(r"author", AuthorViewSet)
 router.register(r"usergroup", SimpleUserGroupViewSet)
+router.register(r"user", SimpleUserViewSet)
 
 urlpatterns = [
     path(r"drf/", include(router.urls)),

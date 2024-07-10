@@ -12,7 +12,7 @@ from typing import Any, Dict, List
 
 import yaml
 from dotenv import load_dotenv
-from fairylandfuture.utils.journal import journal
+from utils.journal import journal
 from fairylandfuture.constants.enums import EncodingEnum
 
 from utils.exceptions import DataSourceError, CacheError
@@ -89,7 +89,7 @@ class BaseConfig:
         self.config_dir = config_dir
 
     def load_config(self) -> Dict[str, Any]:
-        with open(os.path.join(self.config_dir, self.file_name), "r", encoding=EncodingEnum.UTF_8.value) as stream:
+        with open(os.path.join(self.config_dir, self.file_name), "r", encoding=EncodingEnum.utf_8.value) as stream:
             config_data = yaml.safe_load(stream)
         return config_data
 
