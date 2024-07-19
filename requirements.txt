@@ -4,6 +4,10 @@
 #
 #    pip-compile --generate-hashes --output-file=requirements.txt requirements.in
 #
+--trusted-host pypi.org
+--trusted-host pypi.python.org
+--trusted-host files.pythonhosted.org
+
 aiohttp==3.9.5 \
     --hash=sha256:0605cc2c0088fcaae79f01c913a38611ad09ba68ff482402d3410bf59039bfb8 \
     --hash=sha256:0a158704edf0abcac8ac371fbb54044f3270bdbc93e254a82b6c82be1ef08f3c \
@@ -114,7 +118,9 @@ attrs==23.2.0 \
 autopep8==2.2.0 \
     --hash=sha256:05418a981f038969d8bdcd5636bf15948db7555ae944b9f79b5a34b35f1370d4 \
     --hash=sha256:d306a0581163ac29908280ad557773a95a9bede072c0fafed6f141f5311f43c1
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 backcall==0.2.0 \
     --hash=sha256:5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e \
     --hash=sha256:fbbce6a29f263178a1f7915c1940bde0ec2b2a967566fe1c65c1dfb7422bd255
@@ -150,7 +156,9 @@ black==24.4.2 \
     --hash=sha256:e151054aa00bad1f4e1f04919542885f89f5f7d086b8a59e5000e6c616896ffb \
     --hash=sha256:eaea3008c281f1038edb473c1aa8ed8143a5535ff18f978a318f10302b254063 \
     --hash=sha256:ef703f83fc32e131e9bcc0a5094cfe85599e7109f896fe8bc96cc402f3eb4b6e
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 bleach==6.1.0 \
     --hash=sha256:0a31f1837963c41d46bbf1331b8778e1308ea0791db03cc4e7357b97cf42a8fe \
     --hash=sha256:3225f354cfc436b9789c66c4ee030194bee0568fbf9cbdad3bc8b5c26c5f12b6
@@ -415,6 +423,7 @@ django==5.0.6 \
     #   djangorestframework
     #   drf-spectacular
     #   drf-yasg
+    #   pyfairylandfuture
 django-celery-results==2.5.1 \
     --hash=sha256:0da4cd5ecc049333e4524a23fcfc3460dfae91aa0a60f1fae4b6b2889c254e01 \
     --hash=sha256:3ecb7147f773f34d0381bac6246337ce4cf88a2ea7b82774ed48e518b67bb8fd
@@ -430,7 +439,9 @@ django-extensions==3.2.3 \
 django-filter==24.2 \
     --hash=sha256:48e5fc1da3ccd6ca0d5f9bb550973518ce977a4edde9d2a8a154a7f4f0b9f96e \
     --hash=sha256:df2ee9857e18d38bed203c8745f62a803fa0f31688c9fe6f8e868120b1848e48
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 django-redis==5.4.0 \
     --hash=sha256:6a02abaa34b0fea8bf9b707d2c363ab6adc7409950b2db93602e6cb292818c42 \
     --hash=sha256:ebc88df7da810732e2af9987f7f426c96204bf89319df4c6da6ca9a2942edd5b
@@ -452,6 +463,7 @@ djangorestframework==3.15.1 \
     #   -r requirements.in
     #   drf-spectacular
     #   drf-yasg
+    #   pyfairylandfuture
 docopt==0.6.2 \
     --hash=sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491
     # via pipreqs
@@ -474,7 +486,9 @@ fastjsonschema==2.19.1 \
 flake8==7.0.0 \
     --hash=sha256:33f96621059e65eec474169085dc92bf26e7b2d47366b70be2f67ab80dc25132 \
     --hash=sha256:a6dfbb75e03252917f2473ea9653f7cd799c3064e54d4c8140044c5c065f53c3
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 frozenlist==1.4.1 \
     --hash=sha256:04ced3e6a46b4cfffe20f9ae482818e34eba9b5fb0ce4056e4cc9b6e212d09b7 \
     --hash=sha256:0633c8d5337cb5c77acbccc6357ac49a1770b8c487e5b3505c57b949b4b82e98 \
@@ -577,6 +591,7 @@ isort==5.13.2 \
     --hash=sha256:8ca5e72a8d85860d5a3fa69b8745237f2939afe12dbf656afbcb47fe72d947a6
     # via
     #   -r requirements.in
+    #   pyfairylandfuture
     #   pylint
 itypes==1.2.0 \
     --hash=sha256:03da6872ca89d29aef62773672b2d408f490f80db48b23079a4b194c86dd04c6 \
@@ -629,7 +644,9 @@ loguru==0.7.2 \
 markdown==3.6 \
     --hash=sha256:48f276f4d8cfb8ce6527c8f79e2ee29708508bf4d40aa410fbc3b4ee832c850f \
     --hash=sha256:ed4f41f6daecbeeb96e576ce414c41d2d876daa9a16cb35fa8ed8c2ddfad0224
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 markupsafe==2.1.5 \
     --hash=sha256:00e046b6dd71aa03a41079792f8473dc494d564611a8f89bbbd7cb93295ebdcf \
     --hash=sha256:075202fa5b72c86ad32dc7d0b56024ebdbcf2048c0ba09f1cde31bfdd57bcfff \
@@ -831,7 +848,9 @@ mypy==1.10.0 \
     --hash=sha256:f90cff89eea89273727d8783fef5d4a934be2fdca11b47def50cf5d311aff727 \
     --hash=sha256:fa7ef5244615a2523b56c034becde4e9e3f9b034854c93639adb667ec9ec2976 \
     --hash=sha256:fcfc70599efde5c67862a07a1aaf50e55bce629ace26bb19dc17cece5dd31ca4
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 mypy-extensions==1.0.0 \
     --hash=sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d \
     --hash=sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782
@@ -897,6 +916,7 @@ packaging==24.1 \
     #   build
     #   drf-yasg
     #   nbconvert
+    #   pip-review
     #   pipdeptree
 pandocfilters==1.5.1 \
     --hash=sha256:002b4a555ee4ebc03f8b66307e287fa492e4a77b4ea14d3f934328297bb4939e \
@@ -917,19 +937,34 @@ pickleshare==0.7.5 \
 pigar==2.1.4 \
     --hash=sha256:6306d0b4175e4ec9d9209b4156711b46ef479ef2b2ce0423991f0966166d45de \
     --hash=sha256:c83800e55bfe9dfa0546ccf893ae06b9faed7092f3052b45684177d73fa9d28e
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
+pip-autoremove==0.10.0 \
+    --hash=sha256:093c7d9d73c66c191cbaac159bf32a0b2e7cdbc108f1935dacb5d5e09bee9eca \
+    --hash=sha256:1328c6f6ef54b1ea51dd4dd78199d7f8b27c2344e9517fbb4f89edf3bfbb32ba
+    # via pyfairylandfuture
+pip-review==1.3.0 \
+    --hash=sha256:886fc48503a6ec99851036f30a6be07ce7e4610d1491786affecb7a364eddeda
+    # via pyfairylandfuture
 pip-tools==7.4.1 \
     --hash=sha256:4c690e5fbae2f21e87843e89c26191f0d9454f362d8acdbd695716493ec8b3a9 \
     --hash=sha256:864826f5073864450e24dbeeb85ce3920cdfb09848a3d69ebf537b521f14bcc9
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 pipdeptree==2.22.0 \
     --hash=sha256:2eeb0b7925084e8d992bd5bdc00e24fd368b8ca28c003e9049dcb39a15b9614b \
     --hash=sha256:6e1728ee922d102b0ffbdcabf1388f0a44d69d221bb746083b815e3da9f47396
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 pipreqs==0.5.0 \
     --hash=sha256:0809f6217028e35785f80e90217e18043e58c99ba28175e28320f9074dd03874 \
     --hash=sha256:f33298d235ff76def369cb9a3594d084d9badc70cebba1e8cb271fcd4fdc0183
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 platformdirs==4.2.2 \
     --hash=sha256:2d7a1657e36a80ea911db832a8a6ece5ee53d8de21edd5cc5879af6530b1bfee \
     --hash=sha256:38b7b51f512eed9e84a22788b4bce1de17c0adb134d6becb09836e37d8654cd3
@@ -957,7 +992,9 @@ psycopg2==2.9.9 \
     --hash=sha256:d735786acc7dd25815e89cc4ad529a43af779db2e25aa7c626de864127e5a024 \
     --hash=sha256:de80739447af31525feddeb8effd640782cf5998e1a4e9192ebdf829717e3913 \
     --hash=sha256:ff432630e510709564c01dafdbe996cb552e0b9f3f065eb89bdce5bd31fabf4c
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 psycopg2-binary==2.9.9 \
     --hash=sha256:03ef7df18daf2c4c07e2695e8cfd5ee7f748a1d54d802330985a78d2a5a6dca9 \
     --hash=sha256:0a602ea5aff39bb9fac6308e9c9d82b9a35c2bf288e184a816002c9fae930b77 \
@@ -1034,6 +1071,7 @@ psycopg2-binary==2.9.9 \
     # via
     #   -r requirements.in
     #   django-tenant-schemas
+    #   pyfairylandfuture
 pure-eval==0.2.2 \
     --hash=sha256:01eaab343580944bc56080ebe0a674b39ec44a945e6d09ba7db3cb8cec289350 \
     --hash=sha256:2b45320af6dfaa1750f543d714b6d1c520a1688dec6fd24d339063ce0aaa9ac3
@@ -1054,10 +1092,11 @@ pydocstyle==6.3.0 \
     --hash=sha256:7ce43f0c0ac87b07494eb9c0b462c0b73e6ff276807f204d6b53edc72b7e44e1
     # via
     #   -r requirements.in
+    #   pyfairylandfuture
     #   pylama
-pyfairylandfuture==1.0.0 \
-    --hash=sha256:8755453a950a82baeb0d570ac13f9bc2f64b68c0b852b689a2fc42ad92501468 \
-    --hash=sha256:d218d63384616ad4493867197e3d1c74dd92c849d0be05fd3e3cbf791ed5046b
+pyfairylandfuture==1.1.0 \
+    --hash=sha256:13651338650ec14c6b1acc3f0568446194cdf56376fe3ea3ce7777b9ef0298c4 \
+    --hash=sha256:e3a86ab3ca2c2606fe828e0742d1ab1df6f67647a9ec25e1f932f055c61c7307
     # via -r requirements.in
 pyflakes==3.2.0 \
     --hash=sha256:1c61603ff154621fb2a9172037d84dca3500def8c8b630657d1701f026f8af3f \
@@ -1075,11 +1114,15 @@ pygments==2.18.0 \
 pylama==8.4.1 \
     --hash=sha256:2d4f7aecfb5b7466216d48610c7d6bad1c3990c29cdd392ad08259b161e486f6 \
     --hash=sha256:5bbdbf5b620aba7206d688ed9fc917ecd3d73e15ec1a89647037a09fa3a86e60
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 pylint==3.2.3 \
     --hash=sha256:02f6c562b215582386068d52a30f520d84fdbcf2a95fc7e855b816060d048b60 \
     --hash=sha256:b3d7d2708a3e04b4679e02d99e72329a8b7ee8afb8d04110682278781f889fa8
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 pymysql==1.1.1 \
     --hash=sha256:4de15da4c61dc132f4fb9ab763063e693d521a80fd0e87943b9a453dd4c19d6c \
     --hash=sha256:e127611aaf2b417403c60bf4dc570124aeb4a57f5f37b8e95ae399a42f904cd0
@@ -1102,7 +1145,9 @@ python-dateutil==2.9.0.post0 \
 python-dotenv==1.0.1 \
     --hash=sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca \
     --hash=sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   pyfairylandfuture
 pytz==2024.1 \
     --hash=sha256:2a29735ea9c18baf14b448846bde5a48030ed267578472d8955cd0e7443a9812 \
     --hash=sha256:328171f4e3623139da4983451950b28e95ac706e13f3f2630a879749e7a8b319

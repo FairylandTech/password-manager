@@ -86,17 +86,17 @@ drop table public_dev_password_manager.test_using_temp;
 
 --------------------------------------------------------------
 -------------------------- 测试表 -----------------------------
---------------------------------------------------------------
 
 create schema public_dev_test authorization austin;
 
-create table public_dev_test.pubilsh(
-    id serial primary key,
-    name varchar(255) not null unique,
-    area varchar(255) not null,
-    exist boolean not null default true,
-    created_at timestamp not null default current_timestamp,
-    updated_at timestamp not null default current_timestamp
+create table public_dev_test.pubilsh
+(
+    id         serial primary key,
+    name       varchar(255) not null unique,
+    area       varchar(255) not null,
+    exist      boolean      not null default true,
+    created_at timestamp    not null default current_timestamp,
+    updated_at timestamp    not null default current_timestamp
 );
 
 comment on table public_dev_test.pubilsh is '出版社表';
@@ -107,15 +107,16 @@ comment on column public_dev_test.pubilsh.exist is '数据状态';
 comment on column public_dev_test.pubilsh.created_at is '创建时间';
 comment on column public_dev_test.pubilsh.updated_at is '修改时间';
 
-create table public_dev_test.author(
-    id serial primary key,
-    name varchar(255) not null,
-    gender boolean not null,
-    birthday date not null default current_date,
+create table public_dev_test.author
+(
+    id          serial primary key,
+    name        varchar(255) not null,
+    gender      boolean      not null,
+    birthday    date         not null default current_date,
     description text,
-    exist boolean not null default true,
-    created_at timestamp not null default current_timestamp,
-    updated_at timestamp not null default current_timestamp
+    exist       boolean      not null default true,
+    created_at  timestamp    not null default current_timestamp,
+    updated_at  timestamp    not null default current_timestamp
 );
 
 comment on table public_dev_test.author is '作者表';
@@ -129,7 +130,48 @@ comment on column public_dev_test.author.created_at is '创建时间';
 comment on column public_dev_test.author.updated_at is '修改时间';
 
 insert into public_dev_test.pubilsh (name, area)
-values ('香梨出版社', '北京'), ('雪梨出版社', '广州');
+values ('香梨出版社', '北京'),
+       ('雪梨出版社', '广州');
 
 insert into public_dev_test.author (name, gender, birthday)
-values ('姜添池', true, '1998-01-24'), ('陈欣宜', false, '2001-3-9');
+values ('姜添池', true, '1998-01-24'),
+       ('陈欣宜', false, '2001-3-9');
+
+
+create table public_dev_test.user
+(
+    id         serial primary key,
+    username   varchar(255) not null unique,
+    password   varchar(255) not null,
+    email      varchar(255) not null unique,
+    group_id   int,
+    exist      boolean      not null default true,
+    created_at timestamp    not null default current_timestamp,
+    updated_at timestamp    not null default current_timestamp
+);
+
+comment on table public_dev_test.user is '用户';
+comment on column public_dev_test.user.id is 'ID';
+comment on column public_dev_test.user.username is '用户名';
+comment on column public_dev_test.user.password is '密码';
+comment on column public_dev_test.user.email is '邮件';
+comment on column public_dev_test.user.group_id is '用户组ID';
+comment on column public_dev_test.user.exist is '数据状态';
+comment on column public_dev_test.user.created_at is '创建时间';
+comment on column public_dev_test.user.updated_at is '修改时间';
+
+create table public_dev_test.user_group
+(
+    id         serial primary key,
+    name       varchar(255) not null unique,
+    exist      boolean      not null default true,
+    created_at timestamp    not null default current_timestamp,
+    updated_at timestamp    not null default current_timestamp
+);
+
+comment on table public_dev_test.user_group is '用户组';
+comment on column public_dev_test.user_group.id is 'ID';
+comment on column public_dev_test.user_group.name is '用户名';
+comment on column public_dev_test.user_group.exist is '数据状态';
+comment on column public_dev_test.user_group.created_at is '创建时间';
+comment on column public_dev_test.user_group.updated_at is '修改时间';
