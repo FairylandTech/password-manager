@@ -107,9 +107,6 @@ class UserGroupModelSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        # POST -> form-data : validated_data 是 dict
-        # POST -> application/json : validated_data 是 dict
-        # POST -> application/x-www-form-urlencoded : validated_data 是 dict
         journal.debug(f"Create >>> validated data: {validated_data}, type is {type(validated_data)}")
         if "create_time" not in validated_data:
             validated_data.update(create_time=datetime.now(tz=timezone(timedelta(hours=8), name="Asia/Shanghai")))

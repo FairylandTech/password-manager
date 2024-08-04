@@ -37,7 +37,7 @@ schema_view = get_schema_view(
         license=openapi.License(name="AGPL-3.0"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny, ],
 )
 
 
@@ -56,7 +56,7 @@ urlpatterns = [
     # django admin
     # path("admin/", admin.site.urls),
     # Apps
-    path("api-example/", include("apps.example.urls")),
+    path("api/example/", include("apps.example.urls")),
 ]
 
 if settings.DEBUG:
