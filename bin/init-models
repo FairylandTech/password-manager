@@ -1,0 +1,17 @@
+#!/bin/bash
+# @software: PyCharm
+# @author: Lionel Johnson
+# @contact: https://fairy.host
+# @organization: https://github.com/FairylandFuture
+# @since: 2024-08-04 15:32:44 UTC+08:00
+
+# Terminal output color
+RESET_COLOR="\e[0m"
+RED_COLOR="\e[31m"
+GREEN_COLOR="\e[32m"
+
+main() {
+  python manage.py makemigrations
+}
+
+main
