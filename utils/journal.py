@@ -9,10 +9,11 @@
 
 import logging
 
+from django.conf import settings
 from fairylandfuture.modules.journal import Journal
 
-journal: Journal = Journal(serialize=True)
-# journal: Journal = Journal(debug=True, serialize=True)
+# journal: Journal = Journal(debug=settings.DEBUG)
+journal: Journal = Journal(debug=True)
 
 
 class JournalHandler(logging.Handler):

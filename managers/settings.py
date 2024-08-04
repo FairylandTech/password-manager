@@ -75,8 +75,6 @@ INSTALLED_APPS = [
     # "django_prometheus",
     # apps
     "apps.example",
-    "apps.rbac",
-    "apps.account",
 ]
 
 MIDDLEWARE = [
