@@ -27,6 +27,7 @@ class PublishFilter(django_filters.FilterSet):
     class Meta:
         model = PublishModel
         fields = {
+            "id": ["exact"],
             "name": ["icontains"],
             "area": ["icontains"],
             "status": ["exact"],

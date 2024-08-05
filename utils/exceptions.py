@@ -33,3 +33,13 @@ class CacheError(ProgramError):
 
     def __str__(self):
         return self.prompt
+
+
+class RequestParametersMissing(ProgramError):
+
+    def __init__(self, message: str = "Request parameters missing."):
+        self.message = message
+        self.prompt = f"{self.__class__.__name__}: {message}"
+
+    def __str__(self):
+        return self.prompt
